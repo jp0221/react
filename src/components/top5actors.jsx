@@ -3,6 +3,7 @@ import axios from 'axios';
 
 const Top5Actors = () => {
     const [Actors, setActors] = useState([]);
+    const [selectedActor, setSelectedActor] = useState(null);
 
     useEffect(()=>{
         const fetchTop5 = async () => {
@@ -17,6 +18,10 @@ const Top5Actors = () => {
         fetchTop5()
     },[]);
 
+    const handleActorClick = (actor) => {
+        setSelectedActor(actor);
+    }
+
     return (
         <div>
             <div className="Top 5">
@@ -29,12 +34,18 @@ const Top5Actors = () => {
                     {Actors.map(actor=>(
                     <tr>
                         <td>{actor.actor_id}</td>
-                        <td><button>{actor.first_name + ' ' + actor.last_name}</button></td>
+                        <td><button onClick={() => handleActorClick(actor)}>{actor.first_name + ' ' + actor.last_name}</button></td>
                         <td>{actor.movie_count}</td>
                     </tr>
                 ))}
                 </table>
             </div>
+            {selectedActor && (
+                <div className="Actor Description">
+                    <h2>{selectedActor.first_name + ' ' + selectedActor.last_name}</h2>
+                    <p><h3>Top Rented Movies:</h3>{selectedActor.top_rented_movies}</p>
+                </div>
+            )}
         </div>
     )
 };

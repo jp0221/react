@@ -45,7 +45,7 @@ const Customers = () => {
     return (
         <div>
             <header>
-            <a href="http://localhost:3000/">Home</a>
+            <a href="http://localhost:3000/"><h1>Home</h1></a>
                <link rel="stylesheet" href="HomePage.css" />
             </header>
             <div class="topnav">
