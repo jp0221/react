@@ -4,7 +4,7 @@ import axios from 'axios';
 const NewCustomerForm = () => {
     const [formData, setFormData] = useState({
         customer_id: 0,  // Assuming customer_id is an integer
-        store_id: 0,     // Assuming store_id is an integer
+        store_id: 1,     // Assuming store_id is an integer
         first_name: "",
         last_name: "",
         email: "",
@@ -26,11 +26,19 @@ const NewCustomerForm = () => {
         e.preventDefault();
         try {
             const res = await axios.post("http://localhost:5000/customers", formData);
-            console.log(res.data); // Optionally, handle the response from the server
+            console.log(res.data); // Log the response
+            if (res.status === 201) {
+                console.log("Customer created successfully");
+            } else {
+                console.error("Error creating customer");
+            }
+        } catch (error) {
+            console.error(error);
+        } finally {
             // Clear the form or perform any other actions needed
             setFormData({
                 customer_id: 0,
-                store_id: 0,
+                store_id: 1,
                 first_name: "",
                 last_name: "",
                 email: "",
@@ -39,10 +47,10 @@ const NewCustomerForm = () => {
                 create_date: "",
                 last_update: ""
             });
-        } catch (error) {
-            console.error(error);
         }
     };
+    
+    
 
     return (
         <form onSubmit={handleSubmit}>
@@ -61,6 +69,8 @@ const NewCustomerForm = () => {
                 name="store_id"
                 value={formData.store_id}
                 onChange={handleChange}
+                min="1"
+                max="2"
             />
             <label htmlFor="first_name">First Name:</label>
             <input
@@ -101,6 +111,8 @@ const NewCustomerForm = () => {
                 name="active"
                 value={formData.active}
                 onChange={handleChange}
+                min="0"
+                max="1"
             />
             <label htmlFor="create_date">Create Date:</label>
             <input
