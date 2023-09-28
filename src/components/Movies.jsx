@@ -46,7 +46,7 @@ const Movies = () => {
     return (
         <div>
             <header>
-            <a href="http://localhost:3000/">Home</a>
+            <h1><a href="http://localhost:3000/">Home Page</a></h1>
                <link rel="stylesheet" href="HomePage.css" />
             </header>
             <div class="topnav">
