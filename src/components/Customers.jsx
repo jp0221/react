@@ -1,11 +1,14 @@
 import React, { useEffect, useState } from "react";
 import NewCustomerForm from "./NewCustomers";
+import EditCustomerForm from "./EditCustomerForm";
 import axios from 'axios';
 
 const Customers = () => {
     const [Customers, setCustomers] = useState([]);
     const [search, setSearch] = useState("");
     const [data, setData] = useState([]);
+    const [editMode, setEditMode] = useState(false);
+    const [editingCustomerId, setEditingCustomerId] = useState(null);
 
     useEffect(()=>{
         const fetchAllCust = async () => {
@@ -42,6 +45,46 @@ const Customers = () => {
         }
     }
 
+    const handleDelete = async(customerId) => {
+        try {
+            await axios.delete(`http://localhost:5000/customers/${customerId}`)
+
+            const updatedData = data.filter((customer) => customer.customer_id !== customerId);
+            setData(updatedData);
+        } catch (err) {
+            console.log(err);
+        }
+    }
+
+    const handleEdit = (customerId) => {
+        setEditingCustomerId(customerId);
+        setEditMode(true);
+    }
+
+    const handleSaveEdit = async(customerId, newFirstName, newLastName) => {
+        try {
+            await axios.put(`http://localhost:5000/customers/${customerId}`, {first_name: newFirstName, last_name: newLastName});
+
+            const updatedData = data.map((customer) => {
+                if (customer.customer_id === customerId){
+                    return { ...customer, first_name: newFirstName, last_name: newLastName };
+                }
+                return customer;
+            });
+
+            setData(updatedData);
+            setEditMode(false);
+            setEditingCustomerId(null);
+        } catch (err) {
+            console.log(err);
+        }
+    };
+
+    const handleCancelEdit = () => {
+        setEditMode(false);
+        setEditingCustomerId(null);
+    }
+
     return (
         <div>
             <header>
@@ -66,12 +109,29 @@ const Customers = () => {
                         <th>Rental Count</th>
                     </tr>
                     {data.map(customer=>(
+                    <React.Fragment key={customer.customer_id}>
                     <tr key={customer.customer_id}>
                         <td>{customer.customer_id}</td>
                         <td>{customer.first_name}</td>
                         <td>{customer.last_name}</td>
                         <td>{customer.count}</td>
+                        <td>
+                            <button onClick={() => handleDelete(customer.customer_id)}>Delete</button>
+                            <button onClick={() => handleEdit(customer.customer_id)}>Edit</button>
+                        </td>
                     </tr>
+                    {editMode && editingCustomerId === customer.customer_id && (
+                        <tr key={`edit-${customer.customer_id}`}>
+                            <td colSpan="4">
+                                <EditCustomerForm 
+                                    customer={customer}
+                                    onSave={handleSaveEdit}
+                                    onCancel={handleCancelEdit}
+                                />
+                            </td>
+                        </tr>
+                    )}
+                </React.Fragment>
                 ))}
                 </tbody>
                 </table>
