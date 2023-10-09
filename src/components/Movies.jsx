@@ -7,6 +7,8 @@ const Movies = () => {
     const [Movies, setMovies] = useState([]);
     const [search, setSearch] = useState("");
     const [data, setData] = useState([]);
+    const [selectedMovie, setSelectedMovie] = useState(null);
+    
 
     useEffect(()=>{
         const fetchAllMovies = async () => {
@@ -43,6 +45,10 @@ const Movies = () => {
         }
     }
 
+    const handleMovieClick = (movie) => {
+        setSelectedMovie(movie === selectedMovie ? null : movie);
+    };
+
     return (
         <div>
             <header>
@@ -61,19 +67,31 @@ const Movies = () => {
                     <tr>
                         <th>Movie ID</th>
                         <th>Movie Title</th>
-                        <th>Movie Description</th>
                         <th>Actor Names</th>
                         <th>Genre</th>
                     </tr>
                     {data.map(movie=>(
-                    <tr key={movie.film_title}>
-                        <td>{movie.film_id}</td>
-                        <td>{movie.movie_title}</td>
-                        <td>{movie.movie_description}</td>
-                        <td>{movie.actor_names}</td>
-                        <td>{movie.genre_name}</td>
-                        <td><button type="button">Rent</button></td>
-                    </tr>
+                    <React.Fragment key={movie.film_title}>
+                        <tr key={movie.film_title}>
+                            <td>{movie.film_id}</td>
+                            <td><button type="button" onClick={() => handleMovieClick(movie)}>{movie.movie_title}</button></td>
+                            <td>{movie.actor_names}</td>
+                            <td>{movie.genre_name}</td>
+                            <td><button type="button">Rent</button></td>
+                        </tr>
+                        {selectedMovie === movie && (
+                            <tr>
+                                <td colSpan="4">
+                                    <div className="movie-details">
+                                        <h2>Movie Details</h2>
+                                        <p>Title: {selectedMovie.movie_title}</p>
+                                        <p>Description: {selectedMovie.movie_description}</p>
+                                        <p>Rental Rate: {selectedMovie.rental_rate}</p>
+                                    </div>
+                                </td>
+                            </tr>
+                        )}
+                    </React.Fragment>
                     ))}
                 {data.length === 0 && <span>No records found to display!</span>}
                 </table>
