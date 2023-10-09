@@ -60,3 +60,27 @@ header {
     background-color: #3399ff;
     color:whitesmoke;
 }
+
+header a:link {
+    color: blue;
+    background-color: transparent;
+    text-decoration: none;
+}
+
+header a:visited {
+    color: blue;
+    background-color: transparent;
+    text-decoration: none;
+}
+
+header a:hover {
+    color: aqua;
+    background-color: transparent;
+    text-decoration: underline;
+}
+
+header a:active {
+    color: red;
+    background-color: transparent;
+    text-decoration: underline;
+}

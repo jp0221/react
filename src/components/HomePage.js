@@ -11,14 +11,14 @@ const HomePage = () => {
     return (
         <div>
             <header>
-               <h1>Home Page</h1> 
+               <a class="home" href='http://localhost:3000/'><h1>Home Page</h1></a>
                <link rel="stylesheet" href="HomePage.css" />
             </header>
             <main>
                 <div class="topnav">
                     <a class="active" href="http://localhost:3000/Movies">Movies</a>
-                    <a href="http://localhost:3000/customers">Customers</a>
-                    <a href="#Reports">Reports</a>
+                    <a class="active" href="http://localhost:3000/customers">Customers</a>
+                    <a class="active" href="#Reports">Reports</a>
                 </div>
 
                 <div class="top5">

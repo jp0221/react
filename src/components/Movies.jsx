@@ -46,13 +46,13 @@ const Movies = () => {
     return (
         <div>
             <header>
-            <h1><a href="http://localhost:3000/">Home Page</a></h1>
-               <link rel="stylesheet" href="HomePage.css" />
+            <h1><a class="home" href="http://localhost:3000/">Home Page</a></h1>
+                <link rel="stylesheet" href="HomePage.css" />
             </header>
             <div class="topnav">
                 <a class="active" href="http://localhost:3000/Movies">Movies</a>
-                <a href="http://localhost:3000/customers">Customers</a>
-                <a href="#Reports">Reports</a>
+                <a class="active" href="http://localhost:3000/customers">Customers</a>
+                <a class="active" href="#Reports">Reports</a>
             </div>
             <h1>List of Movies</h1>
             <div className="movies">
