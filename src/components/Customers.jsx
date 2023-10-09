@@ -9,6 +9,7 @@ const Customers = () => {
     const [data, setData] = useState([]);
     const [editMode, setEditMode] = useState(false);
     const [editingCustomerId, setEditingCustomerId] = useState(null);
+    const [expandedRows, setExpandedRows] = useState({});
 
     useEffect(()=>{
         const fetchAllCust = async () => {
@@ -85,6 +86,33 @@ const Customers = () => {
         setEditingCustomerId(null);
     }
 
+    const handleReturn = async (customerId) => {
+        try {
+            const response = await axios.put(`http://localhost:5000/customers/return/${customerId}`);
+            
+            if (response.status === 200) {
+                const updatedData = data.map((customer) => {
+                    if (customer.customer_id === customerId) {
+                        return { ...customer, return_date: response.data.return_date };
+                    }
+                    return customer;
+                });
+                setData(updatedData);
+            } else {
+                alert(response.data.message);
+            }
+        } catch (err) {
+            console.log(err);
+        }
+    };
+    
+    const toggleRow = (customerId) => {
+        setExpandedRows((prevState) => ({
+            ...prevState,
+            [customerId]: !prevState[customerId]
+        }));
+    };
+
     return (
         <div>
             <header>
@@ -107,19 +135,42 @@ const Customers = () => {
                         <th>First Name</th>
                         <th>Last Name</th>
                         <th>Rental Count</th>
+                        <th>Return Date</th>
                     </tr>
                     {data.map(customer=>(
                     <React.Fragment key={customer.customer_id}>
                     <tr key={customer.customer_id}>
-                        <td>{customer.customer_id}</td>
+                        <td>
+                            <button onClick={() => toggleRow(customer.customer_id)}>
+                            {expandedRows[customer.customer_id] ? "▼" : "▶"}
+                            </button>
+                            {customer.customer_id}
+                        </td>
                         <td>{customer.first_name}</td>
                         <td>{customer.last_name}</td>
                         <td>{customer.count}</td>
+                        <td>{customer.return_date}</td>
                         <td>
                             <button onClick={() => handleDelete(customer.customer_id)}>Delete</button>
                             <button onClick={() => handleEdit(customer.customer_id)}>Edit</button>
+                            <button onClick={() => handleReturn(customer.customer_id)}>Return</button>
                         </td>
                     </tr>
+                    {expandedRows[customer.customer_id] && (
+                        <tr>
+                            <td colSpan="6">
+                            {customer.rented_movies && customer.rented_movies.length > 0 ? (
+                                <ul>
+                                    {customer.rented_movies.map((movie, index) => (
+                                        <li key={index}>{movie}</li>
+                                    ))}
+                                </ul>
+                            ) : (
+                                <p>No rented movie for this customer</p>
+                            )}
+                            </td>
+                        </tr>
+                    )}
                     {editMode && editingCustomerId === customer.customer_id && (
                         <tr key={`edit-${customer.customer_id}`}>
                             <td colSpan="4">
