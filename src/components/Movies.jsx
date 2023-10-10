@@ -49,6 +49,30 @@ const Movies = () => {
         setSelectedMovie(movie === selectedMovie ? null : movie);
     };
 
+    const handleRentMovieClick = (movie) => {
+        console.log('Rent button clicked');
+        const customerId = prompt('Enter Customer ID:');
+        if (customerId !== null) {
+            // The user clicked OK in the prompt dialog
+            rentMovie(movie.film_id, customerId);
+        }
+    };
+    
+
+    const rentMovie = async (filmId, customerId) => {
+        try {
+            await axios.post(`http://localhost:5000/movies/rent/${filmId}`, {
+                customerId: customerId,
+            });
+            alert('Movie rented successfully.');
+        } catch (error) {
+            console.error(error);
+            alert('An error occurred while renting the movie.');
+        }
+    };
+    
+    
+
     return (
         <div>
             <header>
@@ -77,7 +101,7 @@ const Movies = () => {
                             <td><button type="button" onClick={() => handleMovieClick(movie)}>{movie.movie_title}</button></td>
                             <td>{movie.actor_names}</td>
                             <td>{movie.genre_name}</td>
-                            <td><button type="button">Rent</button></td>
+                            <td><button type="button" onClick={() => handleRentMovieClick(movie)}>Rent</button></td>
                         </tr>
                         {selectedMovie === movie && (
                             <tr>
