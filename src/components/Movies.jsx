@@ -53,7 +53,6 @@ const Movies = () => {
         const customerId = prompt('Enter Customer ID:');
         if (customerId !== null) {
             try {
-                // Check if the movie is available for rent
                 const isAvailable = await checkMovieAvailability(movie.film_id, customerId);
                 
                 if (isAvailable) {
@@ -69,27 +68,24 @@ const Movies = () => {
         }
     };    
     
-    // Function to check movie availability
-const checkMovieAvailability = async (filmId, customerId) => {
-    try {
-        const response = await axios.get(`http://localhost:5000/movies/check-availability/${filmId}/${customerId}`);
-        return response.data.isAvailable;
-    } catch (error) {
-        throw error;
-    }
-};
+    const checkMovieAvailability = async (filmId, customerId) => {
+        try {
+            const response = await axios.get(`http://localhost:5000/movies/check-availability/${filmId}/${customerId}`);
+            return response.data.isAvailable;
+        } catch (error) {
+            throw error;
+        }
+    };
 
-// Function to rent a movie
-const rentMovie = async (filmId, customerId, storeId) => {
-    try {
-        const response = await axios.post('http://localhost:5000/movies/rent', { filmId, customerId, storeId });
-        return response.data;
-    } catch (error) {
-        throw error;
-    }
-};
+    const rentMovie = async (filmId, customerId, storeId) => {
+        try {
+            const response = await axios.post('http://localhost:5000/movies/rent', { filmId, customerId, storeId });
+            return response.data;
+        } catch (error) {
+            throw error;
+        }
+    };
 
-    
     return (
         <div>
             <header>
@@ -99,7 +95,7 @@ const rentMovie = async (filmId, customerId, storeId) => {
             <div class="topnav">
                 <a class="active" href="http://localhost:3000/Movies">Movies</a>
                 <a class="active" href="http://localhost:3000/customers">Customers</a>
-                <a class="active" href="#Reports">Reports</a>
+                <a class="active" href="http://localhost:3000/Report">Reports</a>
             </div>
             <h1>List of Movies</h1>
             <div className="movies">

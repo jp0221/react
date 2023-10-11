@@ -18,7 +18,7 @@ const HomePage = () => {
                 <div class="topnav">
                     <a class="active" href="http://localhost:3000/Movies">Movies</a>
                     <a class="active" href="http://localhost:3000/customers">Customers</a>
-                    <a class="active" href="#Reports">Reports</a>
+                    <a class="active" href="http://localhost:3000/Report">Reports</a>
                 </div>
 
                 <div class="top5">
