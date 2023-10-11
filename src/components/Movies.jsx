@@ -8,7 +8,6 @@ const Movies = () => {
     const [search, setSearch] = useState("");
     const [data, setData] = useState([]);
     const [selectedMovie, setSelectedMovie] = useState(null);
-    
 
     useEffect(()=>{
         const fetchAllMovies = async () => {
@@ -45,47 +44,30 @@ const Movies = () => {
         }
     }
 
-    const handleMovieClick = (movie) => {
+    const handleMovieClick = async (movie) => {
         setSelectedMovie(movie === selectedMovie ? null : movie);
     };
 
-    const handleRentMovieClick = async (movie) => {
-        const customerId = prompt('Enter Customer ID:');
-        if (customerId !== null) {
-            try {
-                const isAvailable = await checkMovieAvailability(movie.film_id, customerId);
-                
-                if (isAvailable) {
-                    await rentMovie(movie.film_id, customerId);
-                    alert('Movie rented successfully!');
-                } else {
-                    alert('This movie is not available for rent.');
-                }
-            } catch (error) {
-                console.error(error);
-                alert('Error checking movie availability or renting the movie. Please try again later.');
-            }
+    const handleRentMovieClick = async (movie) => { 
+        const inputCustomerId = prompt("Enter the Customer ID:");
+        if (inputCustomerId === null || inputCustomerId === "") {
+            return;
         }
-    };    
     
-    const checkMovieAvailability = async (filmId, customerId) => {
+        const customerId = inputCustomerId;
+    
         try {
-            const response = await axios.get(`http://localhost:5000/movies/check-availability/${filmId}/${customerId}`);
-            return response.data.isAvailable;
-        } catch (error) {
-            throw error;
+            await axios.post("http://localhost:5000/rent-movie", {
+                customerId: customerId,
+                movieId: movie.film_id,
+            });
+            alert("Movie rented successfully.");
+        } catch (err) {
+            console.error(err);
+            alert("Failed to rent the movie.");
         }
-    };
-
-    const rentMovie = async (filmId, customerId, storeId) => {
-        try {
-            const response = await axios.post('http://localhost:5000/movies/rent', { filmId, customerId, storeId });
-            return response.data;
-        } catch (error) {
-            throw error;
-        }
-    };
-
+    };      
+        
     return (
         <div>
             <header>
